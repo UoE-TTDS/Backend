@@ -1,0 +1,2 @@
+python -m pip install -r app/requirements.txt
+python -m app/app.py
