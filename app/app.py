@@ -1,13 +1,14 @@
 import logging
 import os
 logging.basicConfig(filename='app.log', filemode='w', format='%(name)s - %(levelname)s - %(message)s')
-
- try:
+try:
     import api
 
     if __name__ == "__main__":
+        print('Create')
         app = api.create_app()
-        app.run(host='0.0.0.0')
+        app.run(debug=True)
+        print('Run done') 
 except Exception as ex:
     logging.error('Failed start: '+ str(e))
     
