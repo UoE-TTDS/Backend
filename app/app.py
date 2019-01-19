@@ -4,11 +4,9 @@ logging.basicConfig(filename='app.log', filemode='w', format='%(name)s - %(level
 try:
     import api
 
-    if __name__ == "__main__":
-        print('Create')
+    if __name__ == "__main__": 
         app = api.create_app()
-        app.run(debug=True)
-        print('Run done') 
+        #app.run(host='0.0.0.0') 
 except Exception as ex:
     logging.error('Failed start: '+ str(e))
     
