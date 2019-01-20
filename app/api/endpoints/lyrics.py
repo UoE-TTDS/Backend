@@ -1,4 +1,4 @@
-from app import api
+import api
 from flask import Blueprint
 from flask_restplus import Resource
 

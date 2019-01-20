@@ -3,7 +3,7 @@ from nltk import PorterStemmer
 from nltk.corpus import stopwords
 nltk.download('stopwords')
 stopwords = set(stopwords.words('english'))
-
+# Maybe extract horus sepeartely?
 class Preprocessor:
     def __init__(self, functions):
         self.functions = functions
@@ -15,7 +15,6 @@ class Preprocessor:
         return d
 
     def split(self, delimiter=None):
-
         if delimiter is None:
             func = lambda x: x.split()
         else:

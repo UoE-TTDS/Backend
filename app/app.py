@@ -1,11 +1,10 @@
-import logging
 import os
-logging.basicConfig(filename='app.log', filemode='w', format='%(name)s - %(levelname)s - %(message)s')
-try:
-    import api
+from api import create_app
+import logging
 
-    if __name__ == "__main__": 
-        app = api.create_app()
-        #app.run(host='0.0.0.0') 
-except Exception as ex:
-    logging.error('Failed start: '+ str(e))
+logging.basicConfig(filename='app.log', level=logging.INFO)
+logging.info("This works")
+
+if __name__ == "__main__":
+    app = create_app()
+    app.run(host='localhost')
