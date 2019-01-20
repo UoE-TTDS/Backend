@@ -9,4 +9,3 @@ try:
         #app.run(host='0.0.0.0') 
 except Exception as ex:
     logging.error('Failed start: '+ str(e))
-    
