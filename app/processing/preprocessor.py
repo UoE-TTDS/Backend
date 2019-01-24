@@ -5,6 +5,7 @@ from nltk.corpus import stopwords
 nltk.download('stopwords')
 stopwords = set(stopwords.words('english'))
 
+
 class Preprocessor:
     def __init__(self, functions):
         self.functions = functions
@@ -48,8 +49,19 @@ class PreprocessorBuilder:
         self.modules.append(low)
         return self
 
+    def smart_removal(self):
+        substitutions = {}
+
+        def remove(words):
+            for w in words:
+                for key in substitutions:
+                    w = w.replace(key,substitutions[key])
+                yield key
+        self.modules.append(remove)
+        return self
+
     def remove_special(self):
-        special = []
+        special = "!\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~"
 
         def remove(words):
             for w in words:

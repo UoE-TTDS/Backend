@@ -12,6 +12,8 @@ class Configuration:
         self.__lyrics_path = ''
         self.__rebuild_database = None
         self.__select_songs = None
+        self.__lyrics_dump_path = ''
+        self.__should_dump_lyrics = None
 
     @staticmethod
     def configure_logging(logFile):
@@ -41,8 +43,11 @@ class Configuration:
         c.__songs_path = paths['Songs']
         c.__selected_lyrics_path = paths['SelectedLyrics']
         c.__lyrics_path = paths['LyricsDatabase']
+        c.__lyrics_dump_path = paths['LyricsDumpPath']
+
         c.__rebuild_database = datasetProcessing.getboolean('RebuildDatabase')
         c.__select_songs = datasetProcessing.getboolean('SelectSongs')
+        c.__should_dump_lyrics = datasetProcessing.getboolean('ShouldDumpLyrics')
         logger.info('All paths read\nPrinting')
         logger.info(
             f'LyricsDatabase = {c.lyrics_path},\nSelectedLyrics = {c.selected_lyrics_path},\nSongsPath = {c.songs_path}')
@@ -53,8 +58,7 @@ class Configuration:
     def get_config() -> 'Configuration':
         if Configuration.config is None:
             Configuration.from_file('./config.cfg')
-        else:
-            return Configuration.config
+        return Configuration.config
 
     @staticmethod
     def get_logger():
@@ -79,3 +83,11 @@ class Configuration:
     @property
     def select_songs(self):
         return self.__select_songs
+
+    @property
+    def lyrics_dump_path(self):
+        return self.__lyrics_dump_path
+
+    @property
+    def should_dump_lyrics(self):
+        return self.__should_dump_lyrics

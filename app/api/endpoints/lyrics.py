@@ -3,7 +3,7 @@ from flask import Blueprint
 from flask_restplus import Resource
 
 api = api.api
-ns = api.namespace('lyrics', description='Cats related operations')
+ns = api.namespace('lyrics', description='Endpoint for lyrics ')
 
 simple_page = Blueprint('lyrics', __name__)
 

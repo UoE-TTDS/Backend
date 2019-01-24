@@ -73,7 +73,7 @@ def select_songs():
 def preprocess_songs():
     print('Preprocessing songs started')
     builder = PreprocessorBuilder()
-    preprocessor = builder.to_lowercase().stop_words().stem().remove_special().build()
+    preprocessor = builder.to_lowercase().stop_words().smart_removal().remove_special().stem().smart_removal().build()
     with open(data_folder + selected_file, 'r', encoding="utf8") as f:
         reader = csv.reader(f)
         i = 0
