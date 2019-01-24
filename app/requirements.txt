@@ -1,5 +1,4 @@
 flask-restplus
 nltk
-sqlite3
 langdetect
 tqdm
