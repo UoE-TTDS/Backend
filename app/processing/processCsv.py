@@ -18,6 +18,8 @@ count = 10
 logger = Configuration.get_logger()
 
 
+
+
 def log_ignored_artist(record):
     logger.info(f'New ignored artist appeared = {record[3]}, the data is {record}')
 
@@ -75,7 +77,14 @@ def select_songs():
 def preprocess_songs(songs_to_process):
     print('Preprocessing songs started')
     builder = PreprocessorBuilder()
-    preprocessor = builder.to_lowercase().stop_words().smart_removal().remove_special().stem().smart_removal().build()
+    preprocessor = builder.\
+        to_lowercase().\
+        stop_words(). \
+        number_removal().\
+        smart_removal().\
+        remove_special().\
+        stem().\
+        build()
     with open(config.selected_lyrics_path, 'r', encoding="utf8") as f:
         reader = csv.reader(f)
         i = 0

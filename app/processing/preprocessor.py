@@ -49,6 +49,16 @@ class PreprocessorBuilder:
         self.modules.append(low)
         return self
 
+    def number_removal(self):
+        def remove(words):
+            for w in words:
+                try:
+                    float(w)
+                except ValueError:
+                    yield w
+        self.modules.append(remove)
+        return self
+
     def regex_removal(self):
         import re
         rgx = [
@@ -62,12 +72,12 @@ class PreprocessorBuilder:
                         continue
                     else:
                         yield w
-
+        self.modules.append(remove)
+        return self
 
     def smart_removal(self):
         substitutions = {
-            "I'm" : "I am",
-
+            "I'm" : "I am"
         }
 
         def remove(words):
