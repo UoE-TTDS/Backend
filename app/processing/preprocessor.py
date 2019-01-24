@@ -55,8 +55,8 @@ class PreprocessorBuilder:
         def remove(words):
             for w in words:
                 for key in substitutions:
-                    w = w.replace(key,substitutions[key])
-                yield key
+                    w = w.replace(key, substitutions[key])
+                yield w
         self.modules.append(remove)
         return self
 
