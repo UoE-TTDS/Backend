@@ -14,6 +14,7 @@ class Configuration:
         self.__select_songs = None
         self.__lyrics_dump_path = ''
         self.__should_dump_lyrics = None
+        self.__songs_to_process = 0
 
     @staticmethod
     def configure_logging(logFile):
@@ -44,7 +45,7 @@ class Configuration:
         c.__selected_lyrics_path = paths['SelectedLyrics']
         c.__lyrics_path = paths['LyricsDatabase']
         c.__lyrics_dump_path = paths['LyricsDumpPath']
-
+        c.__songs_to_process = datasetProcessing.getint('SongsToProcess')
         c.__rebuild_database = datasetProcessing.getboolean('RebuildDatabase')
         c.__select_songs = datasetProcessing.getboolean('SelectSongs')
         c.__should_dump_lyrics = datasetProcessing.getboolean('ShouldDumpLyrics')
@@ -91,3 +92,7 @@ class Configuration:
     @property
     def should_dump_lyrics(self):
         return self.__should_dump_lyrics
+
+    @property
+    def songs_to_process(self):
+        return self.__songs_to_process

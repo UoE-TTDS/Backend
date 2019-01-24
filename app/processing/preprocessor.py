@@ -49,8 +49,26 @@ class PreprocessorBuilder:
         self.modules.append(low)
         return self
 
+    def regex_removal(self):
+        import re
+        rgx = [
+            "[\[\(]\s*(hook|chorus).*[\]\)]"
+        ]
+        rgx = [re.compile(r) for r in rgx]
+        def remove(words):
+            for w in words:
+                for r in rgx:
+                    if r.match(w):
+                        continue
+                    else:
+                        yield w
+
+
     def smart_removal(self):
-        substitutions = {}
+        substitutions = {
+            "I'm" : "I am",
+
+        }
 
         def remove(words):
             for w in words:

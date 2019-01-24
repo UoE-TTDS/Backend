@@ -6,15 +6,15 @@ from .preprocessor import PreprocessorBuilder
 from .Song import Song
 from utils import Configuration
 from tqdm import tqdm
+from bigread import Reader
+
 logging.basicConfig(filename='app.log', filemode='w', format='%(message)s', level=logging.INFO)
 
+config = Configuration.get_config()
 langs = {}
 found_artists = {}
 ignored_artists = {}
 count = 10
-data_folder = '../data/'
-original_file = 'lyrics.csv'
-selected_file = 'selected-lyrics.csv'
 logger = Configuration.get_logger()
 
 
@@ -37,8 +37,12 @@ def format_song(song):
 
 def select_songs():
     print('Selecting songs began...')
-    with open(data_folder + selected_file, 'w', encoding="utf8") as output:
-        with open(data_folder + original_file, 'r', encoding="utf8") as f:
+    batch_size = 100
+    with open(config.selected_lyrics_path, 'w', encoding="utf8") as output:
+
+        #stream = Reader(file='config.lyrics_path', block_size=10)
+        path = config.lyrics_path
+        with open(path, 'r', encoding="utf8") as f:
             reader = csv.reader(f)
             i = 0
             for row in tqdm(reader, unit=" songs"):
@@ -56,13 +60,11 @@ def select_songs():
                             log_new_artist(a)
                         elif detected not in langs:
                             langs[detected] = 1
-                            log_new_language(detected)
                     if to_add is not None:
                         output.write(format_song(a))
                 except LangDetectException:
                     if a[3] not in ignored_artists:
                         ignored_artists[a[3]] = 1
-                        log_ignored_artist(a)
                     continue
                 if i % 10000 == 1:
                     logger.info(f'{i} done')
@@ -70,7 +72,7 @@ def select_songs():
     print('Selecting songs finished')
 
 
-def preprocess_songs():
+def preprocess_songs(songs_to_process):
     print('Preprocessing songs started')
     builder = PreprocessorBuilder()
     preprocessor = builder.to_lowercase().stop_words().smart_removal().remove_special().stem().smart_removal().build()
@@ -81,6 +83,6 @@ def preprocess_songs():
             d = preprocessor.preprocess(row[5])
             yield Song(row[1], row[3], row[5], d)
             i += 1
-        if i % 10000 == 0:
-            logger.info(f'{i} songs done')
+            if 0 < songs_to_process == i:
+                break
     print('Preprocessing songs finished')

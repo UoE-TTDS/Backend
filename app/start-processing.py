@@ -16,7 +16,9 @@ def prepare_dataset(rebuild_database, needs_selecting):
         select_songs()
     if rebuild_database:
         DatasetApi.create_tables()
-        data = preprocess_songs()
+        songs_to_process = Configuration.songs_to_process
+        print(f'Will process {songs_to_process} songs')
+        data = preprocess_songs(songs_to_process)
         DatasetApi.insert_data(data)
 
 
