@@ -1,5 +1,7 @@
 import logging
 import csv
+import queue
+from queue import Empty
 from langdetect import detect
 from langdetect.lang_detect_exception import LangDetectException
 from .preprocessor import PreprocessorBuilder
@@ -7,6 +9,8 @@ from .Song import Song
 from utils import Configuration
 from tqdm import tqdm
 from bigread import Reader
+from threading import Thread
+import asyncio
 
 logging.basicConfig(filename='app.log', filemode='w', format='%(message)s', level=logging.INFO)
 
@@ -16,8 +20,6 @@ found_artists = {}
 ignored_artists = {}
 count = 10
 logger = Configuration.get_logger()
-
-
 
 
 def log_ignored_artist(record):
@@ -37,53 +39,66 @@ def format_song(song):
     return f'{song[0]},{song[1]},{song[2]},{song[3]},{song[4]},"{lyrics}"\n'
 
 
+def solve(q, out):
+    while True:
+        if q.empty():
+            break
+        try:
+            item = q.get_nowait()
+            d = detect(item[5])
+            if d == 'en':
+                out.put(format_song(item))
+        except LangDetectException:
+            pass
+        except Empty:
+            break
+
+
 def select_songs():
     print('Selecting songs began...')
-    batch_size = 100
+    batch_size = 1000
     with open(config.selected_lyrics_path, 'w', encoding="utf8") as output:
-
-        #stream = Reader(file='config.lyrics_path', block_size=10)
         path = config.lyrics_path
         with open(path, 'r', encoding="utf8") as f:
             reader = csv.reader(f)
             i = 0
+            q = queue.Queue(batch_size)
+            out = queue.Queue(batch_size)
             for row in tqdm(reader, unit=" songs"):
-                a = row
-                if a[5] == '' or a[3] in ignored_artists:
-                    continue
-                try:
-                    to_add = None
-                    if a[3] in found_artists:
-                        to_add = a[5]
-                    else:
-                        detected = detect(a[5])
-                        if detected == 'en':
-                            found_artists[a[3]] = 1
-                            log_new_artist(a)
-                        elif detected not in langs:
-                            langs[detected] = 1
-                    if to_add is not None:
-                        output.write(format_song(a))
-                except LangDetectException:
-                    if a[3] not in ignored_artists:
-                        ignored_artists[a[3]] = 1
-                    continue
-                if i % 10000 == 1:
-                    logger.info(f'{i} done')
-                i += 1
+                if i < batch_size:
+                    q.put(row)
+                    i += 1
+                else:  # batch gathered, create threads and solve
+                    threads = []
+                    for _ in range(2):
+                        t = Thread(target=solve, args=(q, out))
+                        threads.append(t)
+                        t.start()
+                    for t in threads:
+                        t.join()
+
+                    while True:
+                        if out.empty():
+                            break
+                        item = out.get_nowait()
+                        output.write(item)
+
+                    q = queue.Queue(batch_size)
+                    out = queue.Queue(batch_size)
+                    i = 0
     print('Selecting songs finished')
 
 
 def preprocess_songs(songs_to_process):
     print('Preprocessing songs started')
     builder = PreprocessorBuilder()
-    preprocessor = builder.\
-        to_lowercase().\
+    preprocessor = builder. \
+        to_lowercase(). \
         stop_words(). \
-        number_removal().\
-        smart_removal().\
-        remove_special().\
-        stem().\
+        number_removal(). \
+        smart_removal(). \
+        remove_special(). \
+        stem(). \
         build()
     with open(config.selected_lyrics_path, 'r', encoding="utf8") as f:
         reader = csv.reader(f)
