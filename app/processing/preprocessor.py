@@ -1,9 +1,10 @@
 import nltk
 from nltk import PorterStemmer
 from nltk.corpus import stopwords
+
 nltk.download('stopwords')
 stopwords = set(stopwords.words('english'))
-# Maybe extract horus sepeartely?
+
 class Preprocessor:
     def __init__(self, functions):
         self.functions = functions
@@ -14,25 +15,19 @@ class Preprocessor:
             d = f(d)
         return d
 
-    def split(self, delimiter=None):
-        if delimiter is None:
-            func = lambda x: x.split()
-        else:
-            func = lambda x: x.split(delimiter)
-        return self
-
 
 class PreprocessorBuilder:
 
     def __init__(self):
         self.modules = []
 
-
     def stem(self):
         stemmer = PorterStemmer()
+
         def st(words):
             for word in words:
                 yield stemmer.stem(word)
+
         self.modules.append(st)
         return self
 
@@ -41,6 +36,7 @@ class PreprocessorBuilder:
             for word in words:
                 if word not in stopwords:
                     yield word
+
         self.modules.append(remove)
         return self
 
@@ -48,6 +44,7 @@ class PreprocessorBuilder:
         def low(words):
             for w in words:
                 yield w.lower()
+
         self.modules.append(low)
         return self
 

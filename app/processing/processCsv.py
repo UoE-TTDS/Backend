@@ -4,7 +4,8 @@ from langdetect import detect
 from langdetect.lang_detect_exception import LangDetectException
 from .preprocessor import PreprocessorBuilder
 from .Song import Song
-
+from utils import Configuration
+from tqdm import tqdm
 logging.basicConfig(filename='app.log', filemode='w', format='%(message)s', level=logging.INFO)
 
 langs = {}
@@ -14,30 +15,33 @@ count = 10
 data_folder = '../data/'
 original_file = 'lyrics.csv'
 selected_file = 'selected-lyrics.csv'
+logger = Configuration.get_logger()
+
 
 def log_ignored_artist(record):
-    logging.info(f'New ignored artist appeared = {record[3]}, the data is {record}')
+    logger.info(f'New ignored artist appeared = {record[3]}, the data is {record}')
 
 
 def log_new_artist(record):
-    logging.info(f'New artist appeared = {record[3]}')
+    logger.info(f'New artist appeared = {record[3]}')
 
 
 def log_new_language(language):
-    logging.info(f'New language appeared = {language}')
+    logger.info(f'New language appeared = {language}')
 
 
 def format_song(song):
-    lyrics = song[5].replace('\n',' ').replace('"','\\"')
+    lyrics = song[5].replace('\n', ' ').replace('"', '\\"')
     return f'{song[0]},{song[1]},{song[2]},{song[3]},{song[4]},"{lyrics}"\n'
 
 
 def select_songs():
-    with open(data_folder+selected_file, 'w', encoding="utf8") as output:
-        with open(data_folder+original_file, 'r', encoding="utf8") as f:
+    print('Selecting songs began...')
+    with open(data_folder + selected_file, 'w', encoding="utf8") as output:
+        with open(data_folder + original_file, 'r', encoding="utf8") as f:
             reader = csv.reader(f)
             i = 0
-            for row in reader:
+            for row in tqdm(reader, unit=" songs"):
                 a = row
                 if a[5] == '' or a[3] in ignored_artists:
                     continue
@@ -60,21 +64,23 @@ def select_songs():
                         ignored_artists[a[3]] = 1
                         log_ignored_artist(a)
                     continue
-                if i % 1000 == 1:
-                    print(i, 'done')
-
-                if i > 10000:
-                    break
+                if i % 10000 == 1:
+                    logger.info(f'{i} done')
                 i += 1
+    print('Selecting songs finished')
+
 
 def preprocess_songs():
+    print('Preprocessing songs started')
     builder = PreprocessorBuilder()
     preprocessor = builder.to_lowercase().stop_words().stem().remove_special().build()
-    with open(data_folder+selected_file, 'r', encoding="utf8") as f:
+    with open(data_folder + selected_file, 'r', encoding="utf8") as f:
         reader = csv.reader(f)
         i = 0
         for row in reader:
             d = preprocessor.preprocess(row[5])
-            yield Song(row[1],row[3],row[5],d)
-            i+=1
-        print(f'{i} songs done')
+            yield Song(row[1], row[3], row[5], d)
+            i += 1
+        if i % 10000 == 0:
+            logger.info(f'{i} songs done')
+    print('Preprocessing songs finished')

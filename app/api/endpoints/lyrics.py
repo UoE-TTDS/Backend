@@ -12,3 +12,4 @@ class Lyrics(Resource):
     @api.doc('query')
     def get(self, query):
         return {query: 'THOSE ARE SOME LYRICS'}
+    
