@@ -45,6 +45,7 @@ class Configuration:
         c.__selected_lyrics_path = paths['SelectedLyrics']
         c.__lyrics_path = paths['LyricsDatabase']
         c.__lyrics_dump_path = paths['LyricsDumpPath']
+        c.__lang_path = paths['LangModelPath']
         c.__songs_to_process = datasetProcessing.getint('SongsToProcess')
         c.__rebuild_database = datasetProcessing.getboolean('RebuildDatabase')
         c.__select_songs = datasetProcessing.getboolean('SelectSongs')
@@ -68,6 +69,10 @@ class Configuration:
     @property
     def songs_path(self):
         return self.__songs_path
+
+    @property
+    def lang_path(self):
+        return self.__lang_path
 
     @property
     def selected_lyrics_path(self):

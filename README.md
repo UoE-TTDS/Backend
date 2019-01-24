@@ -5,7 +5,14 @@
     1. LyricsDatabase - this is a path where you should put your csv file
     1. SelectedLyrics - this is a path where all english songs will be saved
     1. Songs - this is a path where sql database will be placed
-
+# FastText config
+More details on https://github.com/facebookresearch/fastText/tree/master/python
+```
+git clone https://github.com/facebookresearch/fastText.git
+cd fastText
+pip install .
+```
+Download language identifier from https://s3-us-west-1.amazonaws.com/fasttext-vectors/supervised_models/lid.176.ftz
 # Processing configuration
 Since the processing and loading the dataset is a costly operation, two boolean values are provided to select whether the processing should be done.
 

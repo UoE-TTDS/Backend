@@ -2,8 +2,7 @@ import logging
 import csv
 import queue
 from queue import Empty
-from langdetect import detect
-from langdetect.lang_detect_exception import LangDetectException
+import fastText
 from .preprocessor import PreprocessorBuilder
 from .Song import Song
 from utils import Configuration
@@ -15,6 +14,7 @@ import asyncio
 logging.basicConfig(filename='app.log', filemode='w', format='%(message)s', level=logging.INFO)
 
 config = Configuration.get_config()
+lang = fastText.load_model(config.lang_path)
 langs = {}
 found_artists = {}
 ignored_artists = {}
@@ -45,11 +45,10 @@ def solve(q, out):
             break
         try:
             item = q.get_nowait()
-            d = detect(item[5])
-            if d == 'en':
-                out.put(format_song(item))
-        except LangDetectException:
-            pass
+            if len(item[5]) != 0:
+                d = lang.predict(item[5].replace('\n', ' '))[0][0]
+                if d == '__label__en':
+                    out.put(format_song(item))
         except Empty:
             break
 
@@ -93,15 +92,12 @@ def preprocess_songs(songs_to_process):
     print('Preprocessing songs started')
     builder = PreprocessorBuilder()
     preprocessor = builder. \
-        to_lowercase(). \
         stop_words(). \
-        number_removal(). \
-        smart_removal(). \
-        remove_special(). \
         stem(). \
         build()
     with open(config.selected_lyrics_path, 'r', encoding="utf8") as f:
         reader = csv.reader(f)
+        next(reader) # need to skip the header from csv file
         i = 0
         for row in reader:
             d = preprocessor.preprocess(row[5])

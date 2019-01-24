@@ -1,6 +1,7 @@
 import nltk
 from nltk import PorterStemmer
 from nltk.corpus import stopwords
+import re
 
 nltk.download('stopwords')
 stopwords = set(stopwords.words('english'))
@@ -11,6 +12,10 @@ class Preprocessor:
         self.functions = functions
 
     def preprocess(self, data):
+        data = data.lower()
+        data = re.sub(r'[\[\(]\s*(verse|hook|chorus).*[\]\)]', ' ', data)  # remove special sub-cases
+        data = re.sub(r'[\W|\d+]', ' ', data)  # remove all punct marks and numbers, substitute with space
+        data = re.sub(r'\s{2,}', ' ', data)   # convert multi-spaces to one space
         d = data.split()
         for f in self.functions:
             d = f(d)
@@ -53,7 +58,7 @@ class PreprocessorBuilder:
         def remove(words):
             for w in words:
                 try:
-                    float(w)
+                    float(w)  # removed as digit
                 except ValueError:
                     yield w
         self.modules.append(remove)
@@ -77,7 +82,7 @@ class PreprocessorBuilder:
 
     def smart_removal(self):
         substitutions = {
-            "I'm" : "I am"
+            "I'm" : "I am"  # will be removed with stopwords
         }
 
         def remove(words):
@@ -89,7 +94,7 @@ class PreprocessorBuilder:
         return self
 
     def remove_special(self):
-        special = "!\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~"
+        special = "!\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~" # removed as punc mark
 
         def remove(words):
             for w in words:
