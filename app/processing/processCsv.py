@@ -76,7 +76,7 @@ def preprocess_songs(songs_to_process):
     print('Preprocessing songs started')
     builder = PreprocessorBuilder()
     preprocessor = builder.to_lowercase().stop_words().smart_removal().remove_special().stem().smart_removal().build()
-    with open(data_folder + selected_file, 'r', encoding="utf8") as f:
+    with open(config.selected_lyrics_path, 'r', encoding="utf8") as f:
         reader = csv.reader(f)
         i = 0
         for row in reader:
