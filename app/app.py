@@ -8,6 +8,7 @@ logging.info("This works")
 
 app = create_app()
 
+
 if __name__ == "__main__":
     Configuration.from_file('./config.cfg')
     app.run()

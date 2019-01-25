@@ -1,0 +1,162 @@
+html {
+  height: 100%
+}
+
+body {
+  font-family: 'Copperplate', serif !important;
+  text-transform: uppercase;
+  background-image: url("back.gif");
+  background-repeat: no-repeat;
+  background-position: center top;
+  background-size: 50% 100%;
+  background-color: black;
+}
+
+.title {
+  text-align: center;
+  margin-top: 10%;
+  color: #FECDAA;
+  font-size: 2.7vw;
+}
+
+.search-div {
+  text-align: center;
+  margin-top: 1.5%;
+}
+
+.search {
+  outline: 0;
+  padding-top: 0.75%;
+  padding-bottom: 0.75%;
+  width: 37%;
+  background-color: rgb(190,190,190, 0.85);
+  border-color: #979797;
+  border: 2%;
+  opacity: 85%;
+  border-radius: 10px;
+  border-style: solid;
+  background-image: url('lupa.png');
+  background-repeat: no-repeat;
+  background-position: left;
+  background-size: 15%;
+  text-align: center;
+  font-size: 1.5vw;
+}
+
+.results {
+  margin-top: 3.5%;
+  display: inline;
+  display: flex;
+  justify-content: space-between;
+}
+
+.songs {
+  justify-content: stretch;
+  align-items: flex-end;
+  width: 27.5%;
+}
+
+.song-box {
+  margin-bottom: 10%;
+  justify-content: space-around;
+  border-width: 0px 0pc 1px 1px;
+  border-style: solid;
+  border-color: #C0C0C0;
+  padding: 4%;
+}
+
+.song-box:hover {
+  margin-bottom: 10%;
+  justify-content: space-around;
+  border-width: 0px 0pc 1px 1px;
+  border-style: solid;
+  border-color: #C0C0C0;
+  padding: 4%;
+  background-color: rgb(72, 72, 72, 0.65);
+}
+
+.song-title {
+  font-size: 1.1vw;
+  color: #FECDAA;
+  margin: 0;
+}
+
+.song-artist {
+  font-size: 0.8vw;
+  color: #C0C0C0;
+  margin: 0
+}
+
+.number-of-results {
+  color: #FECDAA;
+  margin-left: 4%;
+  font-size: 1vw;
+}
+
+.suggestions {
+  margin-top: 1%;
+  margin-bottom: 10%;
+  margin-left: 5%;
+}
+
+.suggestions-title {
+  color: #C0C0C0;
+  margin-bottom: 3%;
+  font-size: 1vw;
+}
+
+.suggestions-theme {
+  color: #C0C0C0;
+  margin-left: 13%;
+  margin-bottom: 0;
+  font-size: 0.9vw;
+}
+
+.suggestions-theme:hover {
+  color: #FECDAA;
+}
+
+.no-songs-found {
+  margin-top: 3.5%;
+}
+
+.no-songs-found-title {
+  color: #FECDAA;
+  font-size: 1.2vw;
+  margin: 0;
+}
+
+.no-songs-found-suggestion {
+  color: #C0C0C0;
+  font-size: 1.2vw;
+}
+
+.no-songs-found-suggestion em {
+  color: #FECDAA;
+}
+
+.no-songs-found-suggestion em:hover {
+  font-style: normal;
+}
+
+.suggestions-left {
+  margin-top: 1%;
+  margin-bottom: 10%;
+}
+
+.suggestions-title-left {
+  color: #C0C0C0;
+  margin-bottom: 1%;
+  font-size: 1vw;
+}
+
+.suggestions-theme-left {
+  color: #C0C0C0;
+  margin-left: 4%;
+  margin-bottom: 0;
+  font-size: 0.9vw;
+}
+
+.suggestions-theme-left:hover {
+  color: #FECDAA;
+}

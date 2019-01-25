@@ -1,0 +1,69 @@
+html {
+  width:100%;
+  height: 100%;
+  display: table;
+  margin: 0px;
+  padding: 0px;
+}
+
+body {
+  font-family: 'Copperplate', serif !important;
+  text-transform: uppercase;
+  background-image: url("back.gif");
+  background-repeat: no-repeat;
+  background-position: center top;
+  background-size: 50% 100%;
+  background-color: black;
+  width:100%;
+  display:table-cell;
+}
+
+.title {
+  text-align: center;
+  color: #FECDAA;
+  margin-top: 10%;
+  font-size: 2.7vw;
+}
+
+.song-title {
+  text-align: center;
+  color: #BEBEBE;
+  font-size: 2.2vw;
+}
+
+.main {
+  display: flex;
+  flex-direction: row;
+}
+
+.song-container {
+  background-color: #D8D8D8;
+  width: 40%;
+  border-radius: 20px;
+  text-align: center;
+  padding: 2%;
+  margin-top: 2%;
+  margin-bottom: 2%;
+}
+
+.song-line {
+  margin: 10px 0 0 0;
+  font-family: Helvetica;
+  text-transform: none;
+  font-size: 1.1vw;
+}
+
+.back-container {
+  float: left;
+  position: fixed;
+  bottom: 5%;
+}
+
+.back {
+  color: #FECDAA;
+  font-size: 1vw;
+}
+
+.back:hover {
+  color: #D8D8D8;
+}
