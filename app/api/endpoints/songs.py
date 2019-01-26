@@ -18,11 +18,11 @@ class Songs(Resource):
     def get(self, query):
         logger.info(f"Calling get for SONGS with query = {query}")
         try:
-            return {
+            return [{
                 'id': 0,
                 'name': 'song title',
                 'artist': 'artist name'
 
-            }
+            }]
         except Exception as ex:
             logger.error(str(ex))
