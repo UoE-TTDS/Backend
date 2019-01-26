@@ -24,11 +24,11 @@ After the script with both of them on, it is recommended to set those values to 
 # Running songs processing
 1. For pip run the following
 ```
-python -m pip install -r requirements.txt
+python -m pip install -r dev-requirements.txt
 ```
 If you are using Conda
 ```
-conda install --file requirements.txt
+conda install --file dev-requirements.txt
 ```
 
 2. From main catalog run `python start-processing.py`. The processing should start

@@ -7,9 +7,7 @@ from .preprocessor import PreprocessorBuilder
 from .Song import Song
 from utils import Configuration
 from tqdm import tqdm
-from bigread import Reader
 from threading import Thread
-import asyncio
 
 logging.basicConfig(filename='app.log', filemode='w', format='%(message)s', level=logging.INFO)
 
@@ -35,7 +33,7 @@ def log_new_language(language):
 
 
 def format_song(song):
-    lyrics = song[5].replace('\n', ' ').replace('"', '\\"')
+    lyrics = song[5].replace('"',"'")
     return f'{song[0]},{song[1]},{song[2]},{song[3]},{song[4]},"{lyrics}"\n'
 
 
@@ -81,7 +79,6 @@ def select_songs():
                             break
                         item = out.get_nowait()
                         output.write(item)
-
                     q = queue.Queue(batch_size)
                     out = queue.Queue(batch_size)
                     i = 0

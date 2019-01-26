@@ -1,14 +1,21 @@
 from api import create_app
 import logging
 from utils import Configuration
-
-logging.basicConfig(filename='app.log', level=logging.INFO)
-logging.info("This works")
-
-
+from flask import render_template
+logger = Configuration.get_logger()
 app = create_app()
 
 
+@app.route('/search')
+def search():
+    return render_template('search.html')
+
+
+@app.route('/search/song')
+def song():
+    return render_template('song.html')
+
+
 if __name__ == "__main__":
-    Configuration.from_file('./config.cfg')
+    logger.info("Application starting")
     app.run()

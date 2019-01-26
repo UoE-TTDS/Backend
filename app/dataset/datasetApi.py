@@ -11,6 +11,24 @@ lyrics_table_name = 'lyrics'
 
 
 class DatasetApi:
+
+    @staticmethod
+    def get_song_by_id(song_id):
+        logger.info('Calling {getsongbyid}')
+        conn = sqlite3.connect(config.songs_path)
+        c = conn.cursor()
+        query = f"SELECT title, artist, raw_lyrics from {songs_table_name} where song_id={song_id}"
+        logger.info(f"executing {query}")
+        c.execute(query)
+        c.execute(query)
+        data = c.fetchone()
+        return {
+            'lyrics': data[2],
+            'name': data[0],
+            'artist': data[1]
+
+        }
+
     @staticmethod
     def dump_lyrics(path):
         conn = sqlite3.connect(config.songs_path)

@@ -15,7 +15,7 @@ class Preprocessor:
         data = data.lower()
         data = re.sub(r'[\[\(]\s*(verse|hook|chorus).*[\]\)]', ' ', data)  # remove special sub-cases
         data = re.sub(r'[\W|\d+]', ' ', data)  # remove all punct marks and numbers, substitute with space
-        data = re.sub(r'\s{2,}', ' ', data)   # convert multi-spaces to one space
+        data = re.sub(r'\s{2,}', ' ', data)  # convert multi-spaces to one space
         d = data.split()
         for f in self.functions:
             d = f(d)
@@ -61,6 +61,7 @@ class PreprocessorBuilder:
                     float(w)  # removed as digit
                 except ValueError:
                     yield w
+
         self.modules.append(remove)
         return self
 
@@ -70,6 +71,7 @@ class PreprocessorBuilder:
             "[\[\(]\s*(hook|chorus).*[\]\)]"
         ]
         rgx = [re.compile(r) for r in rgx]
+
         def remove(words):
             for w in words:
                 for r in rgx:
@@ -77,12 +79,13 @@ class PreprocessorBuilder:
                         continue
                     else:
                         yield w
+
         self.modules.append(remove)
         return self
 
     def smart_removal(self):
         substitutions = {
-            "I'm" : "I am"  # will be removed with stopwords
+            "I'm": "I am"  # will be removed with stopwords
         }
 
         def remove(words):
@@ -90,11 +93,12 @@ class PreprocessorBuilder:
                 for key in substitutions:
                     w = w.replace(key, substitutions[key])
                 yield w
+
         self.modules.append(remove)
         return self
 
     def remove_special(self):
-        special = "!\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~" # removed as punc mark
+        special = "!\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~"  # removed as punc mark
 
         def remove(words):
             for w in words:

@@ -1,21 +1,11 @@
-from flask import Flask, render_template
+from flask import Flask
 from flask_restplus import Api
 import logging
 from werkzeug.contrib.fixers import ProxyFix
 
 client = None
 api = Api()
-app = Flask(__name__)
-
-
-@app.route('/search')
-def search():
-    return render_template('search.html')
-
-
-@app.route('/search/song')
-def song():
-    return render_template('song.html')
+app = Flask(__name__, template_folder='templates', static_folder='static')
 
 
 def create_app():

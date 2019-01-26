@@ -5,6 +5,7 @@ import logging
 
 class Configuration:
     config = None
+    logger = None
 
     def __init__(self):
         self.__songs_path = ''
@@ -15,15 +16,18 @@ class Configuration:
         self.__lyrics_dump_path = ''
         self.__should_dump_lyrics = None
         self.__songs_to_process = 0
+        self.__lang_path = ''
 
     @staticmethod
     def configure_logging(logFile):
         formatter = logging.Formatter(fmt='%(asctime)s - %(levelname)s - %(module)s - %(message)s')
         handler = logging.FileHandler(logFile)
         handler.setFormatter(formatter)
-        logger = logging.getLogger('main')
-        logger.setLevel(logging.DEBUG)
-        logger.addHandler(handler)
+        if Configuration.logger is None:
+            logger = logging.getLogger('main')
+            logger.setLevel(logging.DEBUG)
+            logger.addHandler(handler)
+
 
     @staticmethod
     def from_file(path):
@@ -53,13 +57,12 @@ class Configuration:
         logger.info('All paths read\nPrinting')
         logger.info(
             f'LyricsDatabase = {c.lyrics_path},\nSelectedLyrics = {c.selected_lyrics_path},\nSongsPath = {c.songs_path}')
-        Configuration.config = c
         return c
 
     @staticmethod
     def get_config() -> 'Configuration':
         if Configuration.config is None:
-            Configuration.from_file('./config.cfg')
+            Configuration.config = Configuration.from_file('./config.cfg')
         return Configuration.config
 
     @staticmethod

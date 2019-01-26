@@ -1,5 +1,1 @@
 flask-restplus
-nltk
-langdetect
-tqdm
-bigread
