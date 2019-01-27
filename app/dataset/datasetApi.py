@@ -22,6 +22,8 @@ class DatasetApi:
         c.execute(query)
         c.execute(query)
         data = c.fetchone()
+        if data is None:
+            return None
         return {
             'lyrics': data[2],
             'name': data[0],

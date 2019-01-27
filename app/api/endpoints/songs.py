@@ -3,6 +3,8 @@ from flask import Blueprint
 from flask_restplus import Resource
 from dataset import DatasetApi as DA
 from utils import Configuration
+from flask import abort
+
 
 api = api.api
 ns = api.namespace('songs', description='Endpoint for songs')
@@ -26,3 +28,5 @@ class Songs(Resource):
             }]
         except Exception as ex:
             logger.error(str(ex))
+            abort(500,str(ex))
+

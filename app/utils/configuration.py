@@ -20,13 +20,10 @@ class Configuration:
 
     @staticmethod
     def configure_logging(logFile):
-        formatter = logging.Formatter(fmt='%(asctime)s - %(levelname)s - %(module)s - %(message)s')
-        handler = logging.FileHandler(logFile)
-        handler.setFormatter(formatter)
+        logging.basicConfig(level=logging.INFO,filename='app.log',
+                            format='%(asctime)s - %(levelname)s - %(module)s - %(message)s')
         if Configuration.logger is None:
             logger = logging.getLogger('main')
-            logger.setLevel(logging.DEBUG)
-            logger.addHandler(handler)
 
 
     @staticmethod

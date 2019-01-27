@@ -1,9 +1,9 @@
 import api
-from flask import Blueprint
+from flask import Blueprint, abort
 from flask_restplus import Resource
 from dataset import DatasetApi as DA
 from utils import Configuration
-
+from werkzeug.exceptions import NotFound
 api = api.api
 ns = api.namespace('song', description='Endpoint for songs')
 
@@ -19,6 +19,8 @@ class Song(Resource):
         logger.info(f"Calling get for SONG with id = {id}")
         try:
             song = DA.get_song_by_id(id)
+            if song is None: 
+                return f'Song with id {id} not found', 404
             return song
         except Exception as ex:
             logger.error(str(ex))
