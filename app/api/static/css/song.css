@@ -37,20 +37,21 @@ body {
 }
 
 .song-container {
-  background-color: #D8D8D8;
+  background-color: rgb(216,216,216,0.95);;
   width: 40%;
   border-radius: 20px;
   text-align: center;
   padding: 2%;
   margin-top: 2%;
   margin-bottom: 2%;
+  min-height: 100%;
 }
 
 .song-line {
-  margin: 10px 0 0 0;
+  margin: 5px 0 0 0;
   font-family: Helvetica;
   text-transform: none;
-  font-size: 1.1vw;
+  font-size: 0.8vw;
 }
 
 .back-container {
@@ -66,4 +67,5 @@ body {
 
 .back:hover {
   color: #D8D8D8;
+  text-decoration: none;
 }

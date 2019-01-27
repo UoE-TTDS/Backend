@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>Search for songs by theme</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css">
+    <link href="https://fonts.googleapis.com/css?family=Balthazar" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='../static/css/search.css') }}">
+  </head>
+  <body>
+    <div class="container">
+      <h1 class="title">Search for songs by theme</h1>
+    </div>
+    <div class="container search-div">
+      <form action="" method="post">
+        <input class="search" value={{query}} type="text" name="topic" maxlength="20" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" autofocus="autofocus">
+      </form>
+    </div>
+
+    <div class="container results">
+      <div class="songs">
+        {% for song in songs %}
+          <a href={{ url_for('song', query=query, song_id=song.id) }} class="song-box-link">
+            <div class="container song-box">
+              <p class="song-title">{{ song.name }}</p>
+              <p class="song-artist">{{ song.artist }}</p>
+            </div>
+          </a>
+        {% endfor %}
+        <p class="number-of-results">{{ number_of_results }} Results Found</p>
+      </div>
+
+      <div class="songs">
+        <div class="suggestions">
+          <p class="suggestions-title">Related Topics:</p>
+          <p class="suggestions-theme">Technology</p>
+          <p class="suggestions-theme">Laptop</p>
+          <p class="suggestions-theme">Informatics</p>
+        </div>
+        <div class="suggestions">
+          <p class="suggestions-title">Popular Searches:</p>
+          <p class="suggestions-theme">Love</p>
+          <p class="suggestions-theme">Hate</p>
+          <p class="suggestions-theme">Computer</p>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

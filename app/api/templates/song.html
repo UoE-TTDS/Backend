@@ -5,42 +5,23 @@
     <title>Search for songs by theme</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css">
     <link href="https://fonts.googleapis.com/css?family=Balthazar" rel="stylesheet">
-    <link rel="stylesheet" type="text/css" href="../static/css/song.css">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='../static/css/song.css') }}">
   </head>
 
   <body>
     <div class="container">
       <h1 class="title">Songs related to Computer</h1>
-      <h2 class="song-title">Technology By Daft Punk</h2>
+      <h2 class="song-title">{{title}} By {{artist}}</h2>
     </div>
 
     <div class="container main">
       <div class="container song-container">
-        <p class="song-line">Buy it, use it, break it, fix it</p>
-        <p class="song-line">Trash it, change it, mail - upgrade it</p>
-        <p class="song-line">Charge it, point it, zoom it, press it</p>
-        <p class="song-line">Snap it, work it, quick - erase it</p>
-        <p class="song-line">Write it, cut it, paste it, save it</p>
-        <p class="song-line">Load it, check it, quick - rewrite it</p>
-        <p class="song-line">Plug it, play it, burn it, rip it</p>
-        <p class="song-line">Drag and drop it, zip - unzip it</p>
-        <p class="song-line">Lock it, fill it, call it, find it</p>
-        <p class="song-line">View it, code it, jam - unlock it</p>
-        <p class="song-line">Surf it, scroll it, pause it, click it</p>
-        <p class="song-line">Cross it, crack it, switch - update it</p>
-        <p class="song-line">Name it, read it, tune it, print it</p>
-        <p class="song-line">Scan it, send it, fax - rename it</p>
-        <p class="song-line">Touch it, bring it, pay it, watch it</p>
-        <p class="song-line">Turn it, leave it, start - format it</p>
-        <p class="song-line"></p>
-        <p class="song-line">[Chorus]</p>
-        <p class="song-line">Technologic</p>
-        <p class="song-line">Technologic</p>
-        <p class="song-line">Technologic</p>
-        <p class="song-line">Technologic</p>
-    </div>
+        {% for lyrics_line in lyrics %}
+          <p class="song-line">{{lyrics_line}}</p>
+        {% endfor %}
+      </div>
     <div class="container back-container">
-      <p class="back">Back to Main Page</p>
+      <a href={{ url_for('search_topic', query=query) }} class="back"><p>Back to Main Page</p></<a>
     </div>
   </body>
 </html>
