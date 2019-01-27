@@ -19,8 +19,9 @@ class Song(Resource):
         logger.info(f"Calling get for SONG with id = {id}")
         try:
             song = DA.get_song_by_id(id)
-            if song is None: 
+            if song is None:
                 return f'Song with id {id} not found', 404
             return song
         except Exception as ex:
             logger.error(str(ex))
+            return f'There was an error in processing the request : {str(ex)}', 500
