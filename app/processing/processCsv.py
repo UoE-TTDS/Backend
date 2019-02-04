@@ -88,16 +88,18 @@ def select_songs():
 def preprocess_songs(songs_to_process):
     print('Preprocessing songs started')
     builder = PreprocessorBuilder()
-    preprocessor = builder. \
-        stop_words(). \
-        stem(). \
-        build()
-    with open(config.selected_lyrics_path, 'r', encoding="utf8") as f:
+    preprocessor = builder.build()# \
+     #   stop_words(). \
+      #  stem(). \
+        #build()
+    with open(config.selected_lyrics_path, 'r', encoding="utf8") as f,\
+        open('./all_songs.txt', 'w', encoding='UTF-8') as songs_file:
         reader = csv.reader(f)
         next(reader) # need to skip the header from csv file
         i = 0
         for row in reader:
             d = preprocessor.preprocess(row[5])
+            songs_file.write(' '.join(d)+'\n')
             yield Song(row[1], row[3], row[5], d)
             i += 1
             if 0 < songs_to_process == i:
