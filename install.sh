@@ -1,5 +1,3 @@
-@echo off
-
 python -m pip install --upgrade pip
 
 mkdir .tmp
@@ -9,7 +7,7 @@ cd fastText
 pip install .
 cd ..
 cd ..
-::cleanup
+
 rm fastText -rf
 
 conda install faiss-cpu -c pytorch
