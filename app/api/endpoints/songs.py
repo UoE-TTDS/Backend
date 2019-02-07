@@ -28,13 +28,13 @@ class Songs(Resource):
             ids_list = ' '.join(str(id) for id in ids[0][0])
             logger.info(f"Retireved data: {ids_list}")
             songs = dataset.get_songs_by_id(ids[0][0])
-            return [{
+            return sorted([{
                 'id': song['id'],
                 'name': song['name'],
                 'artist': song['artist'],
                 'score': f"{mapping[str(song['id'])]:1.10f}"
 
-            } for song in songs]
+            } for song in songs],key=lambda x: x['score'], reverse= True)
         except Exception as ex:
             logger.error(str(ex))
             abort(500,str(ex))
