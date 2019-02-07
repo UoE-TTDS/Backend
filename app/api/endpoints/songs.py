@@ -23,14 +23,17 @@ class Songs(Resource):
     def get(self, query):
         logger.info(f"Calling get for SONGS with query = {query}")
         try:
-            ids = util.get_songs(query, 10)[0][0]
-            ids_list = ' '.join(str(id) for id in ids)
+            ids = util.get_songs(query, 10)
+            maping = {str(i[0]):i[1] for i in list(zip(ids[0][0],ids[1][0]))}
+            ids_list = ' '.join(str(id) for id in ids[0][0])
             logger.info(f"Retireved data: {ids_list}")
-            songs = dataset.get_songs_by_id(ids)
+            songs = dataset.get_songs_by_id(ids[0][0])
+            :
             return [{
                 'id': song['id'],
                 'name': song['name'],
-                'artist': song['artist']
+                'artist': song['artist'],
+                'score': maping[str(song['id'])]
 
             } for song in songs]
         except Exception as ex:
