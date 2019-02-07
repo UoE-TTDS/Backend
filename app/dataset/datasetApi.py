@@ -1,13 +1,13 @@
 import sqlite3
-import os
 from tqdm import tqdm
-from utils import Configuration
+from utils import Configuration, SqlClient, TableObj
 
 config = Configuration.get_config()
 logger = Configuration.get_logger()
-database_name = config.songs_path
+
 songs_table_name = 'songs'
 lyrics_table_name = 'lyrics'
+popularity_table_name = 'popularity'
 
 
 class DatasetApi:
@@ -20,7 +20,6 @@ class DatasetApi:
         query = f"SELECT title, artist, raw_lyrics from {songs_table_name} where song_id={song_id}"
         logger.info(f"executing {query}")
         c.execute(query)
-        c.execute(query)
         data = c.fetchone()
         if data is None:
             return None
@@ -28,7 +27,6 @@ class DatasetApi:
             'lyrics': data[2],
             'name': data[0],
             'artist': data[1]
-
         }
 
     def get_songs_by_id(self, ids):
@@ -38,7 +36,6 @@ class DatasetApi:
         ids = ','.join([str(id) for id in ids])
         query = f"SELECT title, artist, raw_lyrics, song_id from {songs_table_name} where song_id IN ({ids})"
         logger.info(f"executing {query}")
-        c.execute(query)
         c.execute(query)
         data = c.fetchall()
         if data is None:
@@ -66,33 +63,62 @@ class DatasetApi:
         print('Dump done')
 
     @staticmethod
+    def get_table_definitions():
+
+        keys_to_songs = {
+            'song_id': (songs_table_name, 'song_id')
+        }
+        # Songs
+        columns = {
+            'song_id': 'INTEGER PRIMARY KEY',
+            'title': 'TEXT',
+            'artist': 'TEXT',
+            'raw_lyrics': 'TEXT'
+        }
+        songs = TableObj(songs_table_name, columns)
+
+        # Lyrics
+        columns = {
+            'song_id': 'INTEGER',
+            'word': 'TEXT'
+        }
+        lyrics = TableObj(lyrics_table_name, columns, keys_to_songs)
+
+        # Lyrics
+        columns = {
+            'song_id': 'INTEGER',
+            'counter': 'INTEGER',
+            'last_searched': 'TEXT'
+        }
+
+        popularity = TableObj(popularity_table_name, columns, keys_to_songs)
+
+        return [songs, lyrics, popularity]
+
+    @staticmethod
     def create_tables():
-        try:
-            logger.info('Creating tables')
-            try:
-                os.remove(database_name)
-            except:
-                pass
-            conn = sqlite3.connect(database_name)
-            c = conn.cursor()
-            sql = f"""create table if not exists {songs_table_name} (song_id integer PRIMARY KEY  , title TEXT, artist TEXT, raw_lyrics TEXT)"""
-            logger.info(f'Executing {sql}')
-            c.execute(sql)
-            sql = f"""create table if not exists {lyrics_table_name} (song_id integer, word TEXT, FOREIGN KEY(song_id) REFERENCES {songs_table_name}(song_id))"""
-            logger.info(f'Executing {sql}')
-            c.execute(sql)
-            conn.commit()
-            logger.info('Tables created')
-        finally:
-            c.close()
-            conn.close()
+        logger.info('Creating tables')
+
+        tables = DatasetApi.get_table_definitions()
+
+        with SqlClient() as client:
+            for table in tables:
+                client.create_table(table)
+        logger.info('Tables created')
+
+    @staticmethod
+    def clear_database():
+        with SqlClient() as client:
+            client.clear_database()
 
     @staticmethod
     def insert_data(data):
         try:
             conn = sqlite3.connect(config.songs_path)
             c = conn.cursor()
-            i = 0
+            c.execute(f'DELETE FROM {songs_table_name}')
+            c.execute(f'DELETE FROM {lyrics_table_name}')
+            i = 1
             for song in tqdm(data, unit=" songs"):
                 c.execute(
                     f"INSERT INTO {songs_table_name} ('song_id', 'title', 'artist', 'raw_lyrics') VALUES (?, ?, ?, ?)",

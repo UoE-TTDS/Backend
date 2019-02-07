@@ -15,6 +15,7 @@ def prepare_dataset(rebuild_database, needs_selecting):
         logger.info('Selecting songs')
         select_songs()
     if rebuild_database:
+        DatasetApi.clear_database()
         DatasetApi.create_tables()
         songs_to_process = Configuration.songs_to_process
         print(f'Will process {songs_to_process} songs')

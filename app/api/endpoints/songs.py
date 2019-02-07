@@ -14,7 +14,8 @@ simple_page = Blueprint('songs', __name__)
 logger = Configuration.get_logger()
 config = Configuration.get_config()
 
-util = ContentUtil(config.songs_data_path, config.index_path)
+print(config.index_path)
+#util = ContentUtil(config.songs_data_path, config.index_path)
 dataset = DatasetApi()
 
 @ns.route('/<query>')

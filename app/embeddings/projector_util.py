@@ -1,14 +1,15 @@
 import fastText # for sentence embeddings
 import numpy as np
-import faiss  # for similarity search
-
-data_path = '../data'
+from utils import Configuration
+logger = Configuration.get_logger()
 
 class ContentUtil:
 
     def __init__(self, path='./songs.bin.bin', matrix_path=None):
+        logger.info(f'Reading model from {path}')
         self.model_ft = fastText.load_model(path)
         if matrix_path:
+            logger.info(f'matrix path is None, budiling index')
             self.create_index(matrix_path)
 
     def find_nearest_neighbor(self, sentence, ban_set=[], cossims=None):
@@ -47,6 +48,7 @@ class ContentUtil:
         return self.model_ft.get_sentence_vector(topic)
 
     def create_index(self, matrix):
+        import faiss  # for similarity search
         normed_matrix = np.load(matrix)
         self.index = faiss.IndexFlatIP(normed_matrix.shape[1])
         self.index.add(normed_matrix)
