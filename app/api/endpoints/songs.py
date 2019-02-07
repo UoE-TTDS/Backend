@@ -15,7 +15,7 @@ logger = Configuration.get_logger()
 config = Configuration.get_config()
 
 print(config.index_path)
-#util = ContentUtil(config.songs_data_path, config.index_path)
+util = ContentUtil(config.songs_data_path, config.index_path)
 dataset = DatasetApi()
 
 @ns.route('/<query>')
@@ -38,5 +38,4 @@ class Songs(Resource):
             } for song in songs],key=lambda x: x['score'], reverse= True)
         except Exception as ex:
             logger.error(str(ex))
-            abort(500,str(ex))
-
+            abort(500,str(ex)) 
