@@ -31,6 +31,26 @@ class DatasetApi:
 
         }
 
+    def get_songs_by_id(self, ids):
+        logger.info('Calling {getsongbyid}')
+        conn = sqlite3.connect(config.songs_path)
+        c = conn.cursor()
+        ids = ','.join([str(id) for id in ids])
+        query = f"SELECT title, artist, raw_lyrics, song_id from {songs_table_name} where song_id IN ({ids})"
+        logger.info(f"executing {query}")
+        c.execute(query)
+        c.execute(query)
+        data = c.fetchall()
+        if data is None:
+            return None
+        for d in data:
+            yield {
+                'lyrics': d[2],
+                'name': d[0],
+                'artist': d[1],
+                'id': d[3]
+            }
+
     @staticmethod
     def dump_lyrics(path):
         conn = sqlite3.connect(config.songs_path)
@@ -41,7 +61,7 @@ class DatasetApi:
         c.execute(f'SELECT word FROM {lyrics_table_name}')
         print(f'Dumping {count} words, {per_batch} per batch')
         with open(path, mode='w', encoding="utf8") as f:
-            for batch in tqdm(iter(lambda: c.fetchmany(per_batch), []), unit=" batches", total=count//per_batch ):
+            for batch in tqdm(iter(lambda: c.fetchmany(per_batch), []), unit=" batches", total=count // per_batch):
                 f.write(' '.join([b[0] for b in batch]))
         print('Dump done')
 
