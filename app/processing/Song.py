@@ -1,8 +1,7 @@
-from dataclasses import dataclass
-from typing import List
-@dataclass
 class Song:
-    title: str
-    artist: str
-    raw_lyrics: str
-    prepocessed_lyrics: List[str]
+    def __init__(self, title, artist, raw_lyrics, preprocessed_lyrics):
+
+        self.title = title
+        self.artist = artist
+        self.raw_lyrics = raw_lyrics
+        self.prepocessed_lyrics = preprocessed_lyrics
