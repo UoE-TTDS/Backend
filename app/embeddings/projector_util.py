@@ -2,6 +2,7 @@ import fastText # for sentence embeddings
 import numpy as np
 import faiss  # for similarity search
 
+data_path = '../data'
 
 class ContentUtil:
 

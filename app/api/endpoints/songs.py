@@ -4,7 +4,7 @@ from flask_restplus import Resource
 from dataset import DatasetApi as DA
 from utils import Configuration
 from flask import abort
-
+from embeddings import ContentUtil
 
 api = api.api
 ns = api.namespace('songs', description='Endpoint for songs')
@@ -12,7 +12,9 @@ ns = api.namespace('songs', description='Endpoint for songs')
 simple_page = Blueprint('songs', __name__)
 
 logger = Configuration.get_logger()
+config = Configuration.get_config()
 
+util = ContentUtil(config.songs_data_path, config.index_path)
 
 @ns.route('/<query>')
 class Songs(Resource):
