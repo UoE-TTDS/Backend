@@ -23,9 +23,9 @@ class Songs(Resource):
     def get(self, query):
         logger.info(f"Calling get for SONGS with query = {query}")
         try:
-            ids = util.get_songs(query, 10)
-            ids_list = ' '.join([str(id) for id in ids])
-            logger.info(f"Retireved {ids_list}")
+            ids = util.get_songs(query, 10)[0][0]
+            ids_list = ' '.join(str(id) for id in ids)
+            logger.info(f"Retireved data: {ids_list}")
             songs = dataset.get_songs_by_id(ids)
             return [{
                 'id': song['id'],
