@@ -29,7 +29,7 @@ class Songs(Resource):
             songs = dataset.get_songs_by_id(ids)
             return [{
                 'id': song['id'],
-                'name': song['title'],
+                'name': song['name'],
                 'artist': song['artist']
 
             } for song in songs]
