@@ -6,8 +6,10 @@ data_path = '../data'
 
 class ContentUtil:
 
-    def __init__(self, path='./songs.bin.bin', matrix_path=None):
+    def __init__(self, path='../data/songs.bin.bin', matrix_path=None):
         self.model_ft = fastText.load_model(path)
+        self.model_path = path
+        self.matrix_math = matrix_path
         if matrix_path:
             self.create_index(matrix_path)
 
@@ -63,14 +65,40 @@ class ContentUtil:
         :param n: number of required NN
         :return: tuple of arrays (indices, similarity)
         """
-        D, I = self.index.search(self.normalize(self.encode_query(query)).reshape(1, 100), n)
+        query_encoded = self.normalize(self.encode_query(query))
+        D, I = self.index.search(query_encoded.reshape(1, query_encoded.shape[0]), n)
         return I, D
+
+    def add_song(self, song):
+        """
+        Index new song for retrieval. Has to be preprocessed
+        :param song: str
+        """
+        song_encoded = self.normalize(self.encode_query(song))
+        self.index.add(song_encoded.reshape(1, song_encoded.shape[0]))
+
+    def train_embeddings(self, path_to_songs):
+        """
+        Train fastText embeddings based on input file
+        :param path_to_songs:
+        :return:
+        """
+        self.model_ft = fastText.train_unsupervised(
+            input=path_to_songs,
+            model='skipgram',
+        )
+        self.model_ft.save_model(self.model_path+'1.bin')
 
 
 if __name__ == '__main__':
-    util = ContentUtil(matrix_path='./vector_matrix.npy')
+    util = ContentUtil(matrix_path='../data/vector_matrix.npy')
     #util.encode_songs()
     print(util.get_songs('love'))
+    print(util.index.ntotal)
+    util.add_song('tru tutu tra la la nastia bababa')
+    print(util.index.ntotal)
+    print(util.get_songs('tru tutu tra la la'))
+    util.train_embeddings('./all_songs.txt')
 
 """
 Example of output
