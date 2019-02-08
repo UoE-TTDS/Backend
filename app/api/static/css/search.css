@@ -124,6 +124,10 @@ body {
   color: #FECDAA;
 }
 
+.suggestions-theme-link:hover {
+  text-decoration: none;
+}
+
 .no-songs-found {
   margin-top: 3.5%;
 }

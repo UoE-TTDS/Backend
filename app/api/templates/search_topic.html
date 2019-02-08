@@ -20,7 +20,7 @@
     <div class="container results">
       <div class="songs">
         {% for song in songs %}
-          <a href={{ url_for('song', query=query, song_id=song.id) }} class="song-box-link">
+          <a href={{ url_for('song', query=query, song_id=song.id, mode="2") }} class="song-box-link">
             <div class="container song-box">
               <p class="song-title">{{ song.name.replace("-", " ") }}</p>
               <p class="song-artist">{{ song.artist.replace("-", " ") }}</p>
@@ -32,16 +32,16 @@
 
       <div class="songs">
         <div class="suggestions">
-          <p class="suggestions-title">Related Topics:</p>
-          <p class="suggestions-theme">Technology</p>
-          <p class="suggestions-theme">Laptop</p>
-          <p class="suggestions-theme">Informatics</p>
+          <p class="suggestions-title">Recent Songs:</p>
+          {% for recent_song in recent_songs %}
+            <a href={{ url_for('song', query=query, song_id=recent_song.song_id, mode="1") }} class="suggestions-theme-link"><p class="suggestions-theme">{{ recent_song.name }}</p></a>
+          {% endfor %}
         </div>
         <div class="suggestions">
-          <p class="suggestions-title">Popular Searches:</p>
-          <p class="suggestions-theme">Love</p>
-          <p class="suggestions-theme">Hate</p>
-          <p class="suggestions-theme">Computer</p>
+          <p class="suggestions-title">Popular Songs:</p>
+          {% for popular_song in popular_songs %}
+            <a href={{ url_for('song', query=query, song_id=popular_song.song_id, mode="0") }} class="suggestions-theme-link"><p class="suggestions-theme">{{ popular_song.name }}</p></a>
+          {% endfor %}
         </div>
       </div>
     </div>

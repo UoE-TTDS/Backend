@@ -46,11 +46,11 @@ class Songs(Resource):
 class Recent(Resource):
     @api.doc('')
     def get(self):
-        return sorted(list(DatasetApi.get_most_popular(10)), key=lambda x: -int(x['counter']))
+        return sorted(list(DatasetApi.get_most_popular(3)), key=lambda x: -int(x['counter']))
 
 
 @ns.route('/popular')
 class Popularity(Resource):
     @api.doc('')
     def get(self):
-        return list(DatasetApi.get_most_recent(10))
+        return list(DatasetApi.get_most_recent(3))
