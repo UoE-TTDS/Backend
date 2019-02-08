@@ -15,8 +15,9 @@ logger = Configuration.get_logger()
 config = Configuration.get_config()
 
 print(config.index_path)
-#util = ContentUtil(config.songs_data_path, config.index_path)
+# util = ContentUtil(config.songs_data_path, config.index_path)
 dataset = DatasetApi()
+
 
 @ns.route('/<query>')
 class Songs(Resource):
@@ -25,7 +26,7 @@ class Songs(Resource):
         logger.info(f"Calling get for SONGS with query = {query}")
         try:
             ids = util.get_songs(query, 10)
-            mapping = {str(i[0]):i[1] for i in list(zip(ids[0][0],ids[1][0]))}
+            mapping = {str(i[0]): i[1] for i in list(zip(ids[0][0], ids[1][0]))}
             ids_list = ' '.join(str(id) for id in ids[0][0])
             logger.info(f"Retireved data: {ids_list}")
             songs = dataset.get_songs_by_id(ids[0][0])
@@ -35,8 +36,21 @@ class Songs(Resource):
                 'artist': song['artist'],
                 'score': f"{mapping[str(song['id'])]:1.10f}"
 
-            } for song in songs],key=lambda x: x['score'], reverse= True)
+            } for song in songs], key=lambda x: x['score'], reverse=True)
         except Exception as ex:
             logger.error(str(ex))
-            abort(500,str(ex))
+            abort(500, str(ex))
 
+
+@ns.route('/recent')
+class Recent(Resource):
+    @api.doc('')
+    def get(self):
+        return list(DatasetApi.get_most_recent(10))
+
+
+@ns.route('/popular')
+class Popularity(Resource):
+    @api.doc('')
+    def get(self):
+        return list(DatasetApi.get_most_recent(10))

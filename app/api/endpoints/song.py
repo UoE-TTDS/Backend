@@ -3,7 +3,7 @@ from flask import Blueprint, abort
 from flask_restplus import Resource
 from dataset import DatasetApi as DA
 from utils import Configuration
-from werkzeug.exceptions import NotFound
+from dataset import DatasetApi
 api = api.api
 ns = api.namespace('song', description='Endpoint for songs')
 

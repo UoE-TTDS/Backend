@@ -1,5 +1,6 @@
 import sqlite3
 from tqdm import tqdm
+from datetime import datetime
 from utils import Configuration, SqlClient, TableObj
 
 config = Configuration.get_config()
@@ -8,6 +9,8 @@ logger = Configuration.get_logger()
 songs_table_name = 'songs'
 lyrics_table_name = 'lyrics'
 popularity_table_name = 'popularity'
+
+date_time_format = "%Y-%m-%d %H:%M:%S.%f"
 
 
 class DatasetApi:
@@ -110,6 +113,53 @@ class DatasetApi:
     def clear_database():
         with SqlClient() as client:
             client.clear_database()
+
+    @staticmethod
+    def get_most_recent(n):
+        with SqlClient() as client:
+            data = client.execute_sql(
+                f"""SELECT p.song_id, s.title, s.artist, p.counter from {popularity_table_name} p 
+                    LEFT JOIN {songs_table_name} s on p.song_id = s.song_id
+                ORDER BY last_searched DESC LIMIT {n};""")
+            for d in data:
+                yield {
+                    'song_id': d[0],
+                    'name': d[1],
+                    'author': d[2],
+                    'counter': d[3]
+                }
+
+    @staticmethod
+    def get_most_popular(n):
+        with SqlClient() as client:
+            data = client.execute_sql(
+                f"""SELECT p.song_id, s.title, s.artist, p.counter from {popularity_table_name} p 
+                    LEFT JOIN {songs_table_name} s on p.song_id = s.song_id
+                ORDER BY counter DESC LIMIT {n};""")
+            for d in data:
+                yield {
+                    'song_id': d[0],
+                    'name': d[1],
+                    'author': d[2],
+                    'counter': d[3]
+                }
+
+
+    @staticmethod
+    def log_song(song_id):
+        with SqlClient() as client:
+            now = datetime.now().strftime(date_time_format)
+            client.execute_sql(f"""
+            -- Try to update any existing row
+            UPDATE {popularity_table_name} 
+            SET Counter = Counter + 1, last_searched = {now}
+            WHERE song_id = {song_id};
+                        
+            -- If no update happened 
+            INSERT INTO {popularity_table_name}  (song_id, counter, last_searched)
+            SELECT {song_id}, 1, {now}
+            WHERE (Select Changes() = 0); 
+            """)
 
     @staticmethod
     def insert_data(data):

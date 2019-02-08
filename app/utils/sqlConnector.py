@@ -37,7 +37,8 @@ class SqlClient:
         logger.info(f'Executing {sql}')
         c = self.connection.cursor()
         try:
-            c.execute(sql)
+            c.executescript(sql)
+            return c.fetchall()
         finally:
             c.close()
 
