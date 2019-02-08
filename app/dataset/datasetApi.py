@@ -120,7 +120,7 @@ class DatasetApi:
             data = client.execute_sql(
                 f"""SELECT p.song_id, s.title, s.artist, p.counter from {popularity_table_name} p 
                     LEFT JOIN {songs_table_name} s on p.song_id = s.song_id
-                ORDER BY last_searched DESC LIMIT {n};""")
+                ORDER BY date(last_searched) DESC LIMIT {n};""")
             for d in data:
                 yield {
                     'song_id': d[0],
