@@ -33,11 +33,20 @@ class SqlClient:
         except:
             pass
 
-    def execute_sql(self, sql):
+    def execute_script(self, sql):
         logger.info(f'Executing {sql}')
         c = self.connection.cursor()
         try:
             c.executescript(sql)
+            return c.fetchall()
+        finally:
+            c.close()
+
+    def execute_sql(self, sql):
+        logger.info(f'Executing {sql}')
+        c = self.connection.cursor()
+        try:
+            c.execute(sql)
             return c.fetchall()
         finally:
             c.close()

@@ -149,7 +149,7 @@ class DatasetApi:
     def log_song(song_id):
         with SqlClient() as client:
             now = datetime.now().strftime(date_time_format)
-            client.execute_sql(f"""
+            client.execute_script(f"""
             -- Try to update any existing row
             UPDATE {popularity_table_name} 
             SET Counter = Counter + 1, last_searched = "{now}"
