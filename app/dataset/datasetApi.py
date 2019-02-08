@@ -152,12 +152,12 @@ class DatasetApi:
             client.execute_sql(f"""
             -- Try to update any existing row
             UPDATE {popularity_table_name} 
-            SET Counter = Counter + 1, last_searched = {now}
+            SET Counter = Counter + 1, last_searched = "{now}"
             WHERE song_id = {song_id};
                         
             -- If no update happened 
             INSERT INTO {popularity_table_name}  (song_id, counter, last_searched)
-            SELECT {song_id}, 1, {now}
+            SELECT {song_id}, 1, "{now}"
             WHERE (Select Changes() = 0); 
             """)
 

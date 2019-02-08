@@ -21,6 +21,7 @@ class Song(Resource):
             song = DA.get_song_by_id(id)
             if song is None:
                 return f'Song with id {id} not found', 404
+            DA.log_song(id)
             return song
         except Exception as ex:
             logger.error(str(ex))
