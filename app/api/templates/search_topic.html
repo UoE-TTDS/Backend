@@ -13,7 +13,7 @@
     </div>
     <div class="container search-div">
       <form action="" method="post">
-        <input class="search" value={{query}} type="text" name="topic" maxlength="20" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" autofocus="autofocus">
+        <input class="search" value="{{query}}" type="text" name="topic" maxlength="20" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" autofocus="autofocus">
       </form>
     </div>
 
@@ -22,8 +22,8 @@
         {% for song in songs %}
           <a href={{ url_for('song', query=query, song_id=song.id) }} class="song-box-link">
             <div class="container song-box">
-              <p class="song-title">{{ song.name }}</p>
-              <p class="song-artist">{{ song.artist }}</p>
+              <p class="song-title">{{ song.name.replace("-", " ") }}</p>
+              <p class="song-artist">{{ song.artist.replace("-", " ") }}</p>
             </div>
           </a>
         {% endfor %}
