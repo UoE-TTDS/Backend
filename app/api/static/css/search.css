@@ -115,12 +115,19 @@ body {
 
 .suggestions-theme {
   color: #C0C0C0;
-  margin-left: 13%;
-  margin-bottom: 0;
   font-size: 0.9vw;
 }
 
+.suggestions-theme p {
+  margin-bottom: 0;
+}
+
+.suggestions-theme-container {
+  margin-left: 13%;
+}
+
 .suggestions-theme:hover {
+  text-decoration: none;
   color: #FECDAA;
 }
 

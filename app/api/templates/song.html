@@ -6,22 +6,35 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css">
     <link href="https://fonts.googleapis.com/css?family=Balthazar" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='../static/css/song.css') }}">
+    <link rel="shortcut icon" type="image/png" href="{{ url_for('static', filename='../static/css/lupa.png') }}"/>
   </head>
 
   <body>
     <div class="container">
-      <h1 class="title">Songs related to {{query}}</h1>
+      {% if mode == "0" %}
+        <h1 class="title">Popular Songs</h1>
+      {% elif mode == "1" %}
+        <h1 class="title">Recent Songs</h1>
+      {% else %}
+        <h1 class="title">Songs related to {{query}}</h1>
+      {% endif %}
       <h2 class="song-title">{{title.replace("-", " ")}} By {{artist.replace("-", " ")}}</h2>
     </div>
 
-    <div class="container main">
+    <div class="container">
       <div class="container song-container">
         {% for lyrics_line in lyrics %}
           <p class="song-line">{{lyrics_line}}</p>
         {% endfor %}
       </div>
     <div class="container back-container">
-      <a href={{ url_for('search_topic', query=query) }} class="back"><p>Back to Main Page</p></<a>
+      {% if mode == "0" %}
+        <a href={{ url_for('search_topic', query=query) }} class="back"><p>Back to Main Page</p></<a>
+      {% elif mode == "1" %}
+        <a href={{ url_for('search_topic', query=query) }} class="back"><p>Back to Main Page</p></<a>
+      {% else %}
+        <a href={{ url_for('search_topic', query=query) }} class="back"><p>Back to Main Page</p></<a>
+      {% endif %}
     </div>
   </body>
 </html>
