@@ -168,7 +168,7 @@ class DatasetApi:
             c = conn.cursor()
             c.execute(f'DELETE FROM {songs_table_name}')
             c.execute(f'DELETE FROM {lyrics_table_name}')
-            i = 1
+            i = 0
             for song in tqdm(data, unit=" songs"):
                 c.execute(
                     f"INSERT INTO {songs_table_name} ('song_id', 'title', 'artist', 'raw_lyrics') VALUES (?, ?, ?, ?)",
