@@ -34,15 +34,24 @@
       <div class="songs">
         <div class="suggestions">
           <p class="suggestions-title">Recent Songs:</p>
-          {% for recent_song in recent_songs %}
-            <a href={{ url_for('song', query=query, song_id=recent_song.song_id, mode="1") }} class="suggestions-theme-link"><p class="suggestions-theme">{{ recent_song.name }}</p></a>
-          {% endfor %}
+          <div class="suggestions-theme-container">
+            {% for recent_song in recent_songs %}
+              <a href={{ url_for('song', query=query, song_id=recent_song.song_id, mode="1") }} class="suggestions-theme">
+                <p>{{ recent_song.name }}</p>
+              </a>
+            {% endfor %}
+          </div>
         </div>
+
         <div class="suggestions">
           <p class="suggestions-title">Popular Songs:</p>
-          {% for popular_song in popular_songs %}
-            <a href={{ url_for('song', query=query, song_id=popular_song.song_id, mode="0") }} class="suggestions-theme-link"><p class="suggestions-theme">{{ popular_song.name }}</p></a>
-          {% endfor %}
+          <div class="suggestions-theme-container">
+            {% for popular_song in popular_songs %}
+              <a href={{ url_for('song', query=query, song_id=popular_song.song_id, mode="0") }} class="suggestions-theme">
+                <p>{{ popular_song.name }}</p>
+              </a>
+            {% endfor %}
+          </div>
         </div>
       </div>
     </div>
